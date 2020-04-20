@@ -1,9 +1,9 @@
 #name	file	distance	oriented	unique
-RB3PA1	/Volumes/HD2/Lab/bioinfo/annotations/hg19/other/150322_RB3PA1_matches_in_hg19.bed	1000	0	1
-L1HS	/Volumes/HD2/Lab/bioinfo/annotations/hg19/repeats/150302_hg19_rmsk_L1HS_with_subfamilies.bed	2000	0	1
-L1	/Volumes/HD2/Lab/bioinfo/annotations/hg19/repeats/150316_hg19_rmsk_L1_with_L1HS_subfamilies.bed	2000	0	0
-euL1db	/Volumes/HD2/Lab/bioinfo/annotations/hg19/repeats/euL1db/euL1db_MRIP_v1.00.bed	2000	0	1
-fixed_L1	/Volumes/HD2/Lab/bioinfo/annotations/hg19/repeats/150302_hg19.fixed.L1HS-Ta.Myers.curated1000GP.noY.bed	2000	0	1
-Gene	/Volumes/HD2/Lab/bioinfo/annotations/hg19/refseq/hg19_RefSeqGenes_hgnc_gene_names.bed	5000	0	1
-Gene_Feature	/Volumes/HD2/Lab/bioinfo/annotations/hg19/refseq/hg19_RefSeqGenes_annotated.true.bed	0	0	0
-Closest_Exon	/Volumes/HD2/Lab/bioinfo/annotations/hg19/refseq/hg19_RefSeqGenes_Exons.bed	5000	0	1
+RB3PA1	annotations/150322_RB3PA1_matches_in_hg19.bed	1000	0	1
+L1HS	annotations/150302_hg19_rmsk_L1HS_with_subfamilies.bed	2000	0	1
+L1	annotations/150316_hg19_rmsk_L1_with_L1HS_subfamilies.bed	2000	0	0
+euL1db	annotationseuL1db_MRIP_v1.00.bed	2000	0	1
+fixed_L1	annotations/150302_hg19.fixed.L1HS-Ta.Myers.curated1000GP.noY.bed	2000	0	1
+Gene	annotations/hg19_RefSeqGenes_hgnc_gene_names.bed	5000	0	1
+Gene_Feature	annotations/hg19_RefSeqGenes_annotated.true.bed	0	0	0
+Closest_Exon	annotations/hg19_RefSeqGenes_Exons.bed	5000	0	1
