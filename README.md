@@ -9,7 +9,6 @@ Scripts to call L1 insertions from single-cell ATLAS-seq experiments.
 - [Picard tools](http://broadinstitute.github.io/picard/) (tested version: 1.136)
 - [bedtools](https://github.com/arq5x/bedtools2) (tested version: 2.25.0)
 - [seqtk](https://github.com/lh3/seqtk) (tested version: 1.0; note that seqtk is only required if subsampling of sequencing data is used - to reduce time of analysis in tests)
-- [GNU parallel](https://www.gnu.org/software/parallel/) (tested version: 20150522)
 - GNU grep/awk
 
 ### Prepare the general configuration file and organize your project folders
@@ -19,11 +18,10 @@ Prepare directories as follow:
 project/
 |-- annotations
 |-- data
-|   `-- atlas-seq
 |-- results
 `-- scripts
 ```
-The `data/atlas-seq` folder should contain the .fastq files.
+The `data` folder should contain the .fastq files.
 
 ### Other requirements
 - A human reference genome sequence (ex:`hg19.fa`) and its bwa index (ex: `hg19.fa.amb, .ann, .bwt, .fai, .pac, .sa`). Their location is indicated in the `.atlas.conf` file.
@@ -44,7 +42,7 @@ cd project/results
 ../scripts/atlas-clustering_v2.2_forktest_nosoft.sh \
 	-d 0 \
 	-b ../annotations/3pp.bc \
-	../data/atlas-seq/single_cell_embryos/R05_INS-203.ATLAS-seq.E6T_E6C1_3prime.fastq
+	../data/R05_INS-203.ATLAS-seq.E6T_E6C1_3prime.fastq
 ```
 
 Example for a 5'-atlas-seq run:
@@ -55,7 +53,7 @@ cd project/results
 	-d 0 \
 	-f \
 	-b ../annotations/5pp.bc \
-	../data/atlas-seq/single_cell_embryos/R07_INS-208.ATLAS-seq_E6C1_5prime_E6C3_5prime.fastq
+	../data/R07_INS-208.ATLAS-seq_E6C1_5prime_E6C3_5prime.fastq
 ```
 
 ### Step 2: move all result files into a unique folder
