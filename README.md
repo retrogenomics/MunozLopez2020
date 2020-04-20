@@ -1,4 +1,4 @@
-# MunozLopez2020
+# Munoz-Lopez et al. (2020)
 Scripts to call L1 insertions from single-cell ATLAS-seq experiments.
 
 ## Before starting
