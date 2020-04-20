@@ -1,7 +1,8 @@
 # MunozLopez2020
 Scripts to call L1 insertions from single-cell ATLAS-seq experiments.
 
-## Installation
+## Before starting
+
 ### Dependencies
 - [cutadapt](https://github.com/marcelm/cutadapt) (tested version: 1.14)
 - [bwa](https://github.com/lh3/bwa) (tested version: 0.7.16a)
@@ -11,83 +12,78 @@ Scripts to call L1 insertions from single-cell ATLAS-seq experiments.
 - [GNU parallel](https://www.gnu.org/software/parallel/) (tested version: 20150522)
 - GNU grep/awk
 
+### Prepare the general configuration file and organize your project folders
+Place and edit the `.atlas.conf` file in your home folder according to your configuration.
+Prepare directories as follow:
+```
+project/
+|-- annotations
+|-- data
+|   `-- atlas-seq
+|-- results
+`-- scripts
+```
+The `data/atlas-seq` folder should contain the .fastq files.
+
 ### Other requirements
-- A human reference genome sequence (ex:`hg19.fa`), 
-- and its bwa index (ex: `hg19.fa.amb, .ann, .bwt, .fai, .pac, .sa`)
+- A human reference genome sequence (ex:`hg19.fa`) and its bwa index (ex: `hg19.fa.amb, .ann, .bwt, .fai, .pac, .sa`). Their location is indicated in the `.atlas.conf` file.
+- adjust the paths of annotations files in the `annotations/annotations_sc_5atlas.txt` and `annotations/annotations_sc_5atlas.txt` files.
 
-### Procedure
+## Procedure
 
-1. Download from GitHub:
+### Step 1: For each sequencing run, run the atlas-clustering script:
+Starting from a sequencing run, this script:
+- demultiplex the sequencing reads based on samples
+- trim the reads and map them on the reference genome provided
+- cluster sequencing reads and identify potential break points
+
+1. example for a 3'-atlas-seq run
+The barcode file `.bc` is a tabular text file with 3 columns (index name, index sequence, sample name). An example is provided in the annotation folder.
 ```
-git clone https://github.com/retrogenomics/ml.git
-```
-2. Edit the `CONFIG` file in the `ml/scripts/` folder according to your configuration
-3. Edit the experiment configuration file (sequencing metadata) according to your sequencing data.
-   - This file is stored in the `ml/experiments/` folder and its name.
-   - Its location should be included in the `CONFIG`file as `EXP_CONFIG="${EXPERIMENTS}/<your file name>"`.
-   - `atlas-neo-R01-to-R09.txt` is the default example.
-
-## How to use?
-### To process sequencing data and get L1 insertions
-```bash
-cd iss/scripts
-./atlas-neo_all_samples.sh
-```
-
-### To generate control L1 files
-
-Go to the `(...)/iss/datasets/l1neo` directory and run the following commands for target loci (loc, non-redundant) and insertions (ins, can be redundant if several L1 insert at the same nucleotidic position).
-
-Note that control datasets are generated using the same filters as the experimental dataset, i.e. using the `hg19.helaAllowedGenomeSpace.bed` file to keep only insertions which are in chr1-22 and chrX, and to exclude blacklisted regions (ENCODE, Duke).
-
-1. Random datasets
-
-```bash
-../../scripts/random_generator.sh \
-	-N 1000 \
-	-n "l1neo|insilico|soni|random_loc" \
-	-a ../../annotations/hg19.helaAllowedGenomeSpace.bed \
-	-g ../../annotations/hg19.genome \
-	-i hg19.l1neo.soni.loc.helas3.bed \
-	-o random_loc \
-	-p hg19.l1neo.soni.random_loc.
+cd project/results
+../scripts/atlas-clustering_v2.2_forktest_nosoft.sh \
+	-d 0 \
+	-b ../annotations/3pp.bc \
+	../data/atlas-seq/single_cell_embryos/R05_INS-203.ATLAS-seq.E6T_E6C1_3prime.fastq
 ```
 
-```bash	
-../../scripts/random_generator.sh \
-	-N 1000 \
-	-n "l1neo|insilico|soni|random_ins" \
-	-a ../../annotations/hg19.helaAllowedGenomeSpace.bed \
-	-g ../../annotations/hg19.genome \
-	-i hg19.l1neo.soni.ins.helas3.bed \
-	-o random_ins \
-	-p hg19.l1neo.soni.random_ins.
+2. example for a 5'-atlas-seq run
+The barcode file `5pp.bc` has 3 columns: index name, index sequence, sample name.
+```
+cd project/results
+../scripts/atlas-clustering_v2.2_forktest_nosoft.sh \
+	-d 0 \
+	-f \
+	-b ../annotations/5pp.bc \
+	../data/atlas-seq/single_cell_embryos/R07_INS-208.ATLAS-seq_E6C1_5prime_E6C3_5prime.fastq
 ```
 
-2. Matched random control (mrc) datasets
-
-```bash
-../../scripts/mrc_generator.sh \
-	-N 1000 \
-	-n "l1neo|insilico|soni|mrc_loc" \
-	-a ../../annotations/hg19.helaAllowedGenomeSpace.bed \
-	-g ../../annotations/hg19.genome \
-	-f ~/references/human/hg19.fa \
-	-i hg19.l1neo.soni.loc.helas3.bed \
-	-o mrc_loc \
-	-p hg19.l1neo.soni.mrc_loc.
+### Step 2: move all result files into same folder (../150319_pooled_encode_cell_lines_1.6)
+```
+mkdir -p project/results/pooled_single_cells
+cp project/results/*_*atlas*/* project/results/pooled_single_cells/
 ```
 
-```bash
-../../scripts/mrc_generator.sh \
-	-N 1000 \
-	-n "l1neo|insilico|soni|mrc_ins" \
-	-a ../../annotations/hg19.helaAllowedGenomeSpace.bed \
-	-g ../../annotations/hg19.genome \
-	-f ~/references/human/hg19.fa \
-	-i hg19.l1neo.soni.ins.helas3.bed \
-	-o mrc_ins \
-	-p hg19.l1neo.soni.mrc_ins.
+### Step 3: run the peak calling and annotation script from the pooled folder
+This script calls L1 peaks within large clusters of reads due to local amplification during the whole genome amplification process, and annotate them.
+```
+cd results/pooled_single_cells
+project/scripts/atlas-seq_single_cells_Acount.sh
 ```
 
+### Step 4: additional filters
+This filtering step was added to remove artefactual amplifications in the WGA procedure.
 
+```
+cd results/pooled_single_cells
+for file in *.3atlas.v2.2forktest_nosoft.best.insertions.10kb.full.annotated.bed ;
+do
+	name=$( echo -e $file | awk -F "." '{printf $1}' ) ;
+
+	awk '($1~/^#/) || (($5>=3 && $8+$7>=1) && (($19~/L1HS\|Ta/) || (($19=="." && $21!~/L1PA/) && ($17=="." || $11==0 ) && ($NF<=1))))' ${name}.3atlas.v2.2forktest_nosoft.best.insertions.10kb.full.annotated.bed \
+	> ${name}.3atlas.v2.2forktest_nosoft.best.insertions.10kb.full.annotated.filtered.bed;
+
+	cut -f1-6 ${name}.3atlas.v2.2forktest_nosoft.best.insertions.10kb.full.annotated.filtered.bed \
+	> ${name}.3atlas.v2.2forktest_nosoft.best.insertions.10kb.filtered.true.bed;
+done
+```
