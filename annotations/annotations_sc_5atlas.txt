@@ -4,5 +4,5 @@ L1	ml/annotations/150316_hg19_rmsk_L1_with_L1HS_subfamilies.bed	2000	0	0
 euL1db	ml/annotations/euL1db_MRIP_v1.00.bed	2000	0	1
 fixed_L1	ml/annotations/150302_hg19.fixed.L1HS-Ta.Myers.curated1000GP.noY.bed	2000	0	1
 Gene	ml/annotations/hg19_RefSeqGenes_hgnc_gene_names.bed	5000	0	1
-Gene_Feature	/ml/annotations/hg19_RefSeqGenes_annotated.true.bed	0	0	0
+Gene_Feature	ml/annotations/hg19_RefSeqGenes_annotated.true.bed	0	0	0
 Closest_Exon	ml/annotations/hg19_RefSeqGenes_Exons.bed	5000	0	1
