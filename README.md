@@ -37,7 +37,7 @@ Starting from a sequencing run, this script:
 - trim the reads and map them on the reference genome provided
 - cluster sequencing reads and identify potential break points
 
-1. example for a 3'-atlas-seq run
+Example for a 3'-atlas-seq run:
 The barcode file `.bc` is a tabular text file with 3 columns (index name, index sequence, sample name). An example is provided in the annotation folder.
 ```
 cd project/results
@@ -47,7 +47,7 @@ cd project/results
 	../data/atlas-seq/single_cell_embryos/R05_INS-203.ATLAS-seq.E6T_E6C1_3prime.fastq
 ```
 
-2. example for a 5'-atlas-seq run
+Example for a 5'-atlas-seq run:
 The barcode file `5pp.bc` has 3 columns: index name, index sequence, sample name.
 ```
 cd project/results
@@ -58,14 +58,14 @@ cd project/results
 	../data/atlas-seq/single_cell_embryos/R07_INS-208.ATLAS-seq_E6C1_5prime_E6C3_5prime.fastq
 ```
 
-### Step 2: move all result files into same folder (../150319_pooled_encode_cell_lines_1.6)
+### Step 2: move all result files into a unique folder
 ```
 mkdir -p project/results/pooled_single_cells
 cp project/results/*_*atlas*/* project/results/pooled_single_cells/
 ```
 
 ### Step 3: run the peak calling and annotation script from the pooled folder
-This script calls L1 peaks within large clusters of reads due to local amplification during the whole genome amplification process, and annotate them.
+This script calls L1 peaks within large local amplification clusters and annotate them.
 ```
 cd results/pooled_single_cells
 project/scripts/atlas-seq_single_cells_Acount.sh
